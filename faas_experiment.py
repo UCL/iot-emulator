@@ -62,6 +62,10 @@ class FaaSExperiment(Experiment):
            elif self.faasType == 'flask':
               path = '/home/uceeftu/faas/flask-functions'
            command = path + '/log_retriever.sh ' + self.setName + '/' + self.name
+
+           # service logs hang when the number of containers for a service is > 1
+           # waiting until docker swarm decreases the number of replicas
+           time.sleep(60)
            result = self.clusterMgmHost.sudo(command, pty=True)
            if result.ok == True:
               print('Collected service logs') 

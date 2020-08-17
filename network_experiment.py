@@ -67,6 +67,7 @@ class SimpleNetworkExperiment(Experiment):
            print('Starting Mon')
            self.monitor = Monitoring(self.mon_controller, '6666', self.exp_path, self.iot, self.edge, self.tcpdump_if, self.tcpdump_port, self.receiver)
            self.monitor.init()
+           self.monitor.set_consumer_pid(self.consumer_PID)
            self.monitor.start_components()
            self.monitor.start_monitoring()
            

@@ -18,6 +18,7 @@ class Monitoring():
 
     probe_hostmon_class = 'mon.lattice.appl.demo.iot.HostInfoProbe'
     probe_tcpdump_class = 'mon.lattice.appl.demo.iot.TcpdumpProbe'
+    probe_process_class = 'mon.lattice.appl.demo.iot.ProcessInfoProbe'
 
     probe_datarate = '5'
 
@@ -25,6 +26,8 @@ class Monitoring():
     reporter_hostmon_logfile = '/hostmon.log'
     reporter_tcpdump_class = 'mon.lattice.appl.demo.iot.TcpdumpReporter'
     reporter_tcpdump_logfile = '/tcpdump.log'
+    reporter_process_class = 'mon.lattice.appl.demo.iot.ProcessInfoReporter'
+    reporter_process_logfile = '/consumerproc.log'
 
 
     def __init__(self, host, port, exp_path, iot_host, edge_host, edge_tcpdump_if, edge_tcpdump_port, receiver_host):
@@ -41,29 +44,13 @@ class Monitoring():
         self.probe_edge_tcpdump_if = edge_tcpdump_if
         self.probe_edge_tcpdump_port = edge_tcpdump_port
 
-        #self.user='uceeftu'
-        #self.key='/home/uceeftu/.ssh/id_rsa'
-
-        #self.controller_port_info = '6699'
-        #self.controller_port_control = '5555'
-
-        #self.dc_class = 'mon.lattice.appl.dataconsumers.ZMQControllableDataConsumerDaemon'
-        #self.dc_port = '32998'
         self.dc_args = Monitoring.dc_port + '+' + self.controller_host + '+' + Monitoring.controller_port_info + '+' +  Monitoring.controller_port_control
 
-        #self.ds_class = 'mon.lattice.appl.datasources.ZMQDataSourceDaemon'
         self.ds_args = self.host_receiver + '+' +  Monitoring.dc_port + '+' + self.controller_host + '+' +  Monitoring.controller_port_info + '+' +  Monitoring.controller_port_control
 
-        #self.probe_hostmon_class = 'mon.lattice.appl.demo.iot.HostInfoProbe'
-        #self.probe_tcpdump_class = 'mon.lattice.appl.demo.iot.TcpdumpProbe'
-
-        #self.probe_datarate = '5'
-
-        #self.reporter_hostmon_class = 'mon.lattice.appl.demo.iot.HostInfoReporter'
-        #self.reporter_tcpdump_class = 'mon.lattice.appl.demo.iot.TcpdumpReporter'
         self.reporter_hostmon_args = self.exp_path +  Monitoring.reporter_hostmon_logfile
         self.reporter_tcpdump_args = self.exp_path +  Monitoring.reporter_tcpdump_logfile
-
+        self.reporter_process_args = self.exp_path +  Monitoring.reporter_process_logfile
 
 
 
@@ -83,6 +70,7 @@ class Monitoring():
         self.receiver_dc = self.lattice.start_dc(self.host_receiver_session, Monitoring.dc_class, self.dc_args)
         self.reporter_receiver_hostmon = self.lattice.load_reporter(self.receiver_dc, Monitoring.reporter_hostmon_class, self.reporter_hostmon_args)
         self.reporter_receiver_tcpdump = self.lattice.load_reporter(self.receiver_dc, Monitoring.reporter_tcpdump_class, self.reporter_tcpdump_args)
+        self.reporter_receiver_process = self.lattice.load_reporter(self.receiver_dc, Monitoring.reporter_process_class, self.reporter_process_args)
 
         self.iot_ds = self.lattice.start_ds(self.host_iot_session, Monitoring.ds_class, self.ds_args)
         self.edge_ds = self.lattice.start_ds(self.host_edge_session, Monitoring.ds_class, self.ds_args)
@@ -90,36 +78,44 @@ class Monitoring():
         iot_hostmon_args = self.host_iot + '+' + Monitoring.probe_datarate
         self.probe_iot_hostmon = self.lattice.load_probe(self.iot_ds, Monitoring.probe_hostmon_class, iot_hostmon_args)
 
-        #iot_tcpdump_args = self.host_iot + '+' + self.probe_iot_tcpdump_if + '+' + self.probe_iot_tcpdump_port + '+' + Monitoring.probe_datarate
-        #self.probe_iot_tcpdump = self.lattice.load_probe(self.iot_ds, Monitoring.probe_tcpdump_class, iot_tcpdump_args)
-
         edge_hostmon_args = self.host_edge + '+' + Monitoring.probe_datarate
         self.probe_edge_hostmon = self.lattice.load_probe(self.edge_ds, Monitoring.probe_hostmon_class, edge_hostmon_args)
 
         edge_tcpdump_args = self.host_edge + '+' + self.probe_edge_tcpdump_if + '+' + self.probe_edge_tcpdump_port + '+' + Monitoring.probe_datarate
         self.probe_edge_tcpdump = self.lattice.load_probe(self.edge_ds, Monitoring.probe_tcpdump_class, edge_tcpdump_args)
 
-        
+        edge_process_args = self.host_edge + '+' + Monitoring.probe_datarate + '+' + self.consumer_pid
+        self.probe_edge_process = self.lattice.load_probe(self.edge_ds, Monitoring.probe_process_class, edge_process_args)        
+
+ 
+    def set_consumer_pid(self, pid):
+        self.consumer_pid = pid
+
+
+    def get_consumer_pid(self):
+        return self.consumer_pid
+
 
     def start_monitoring(self):
         self.lattice.probe_on(self.probe_iot_hostmon)
-        #self.lattice.probe_on(self.probe_iot_tcpdump)
         self.lattice.probe_on(self.probe_edge_hostmon)
         self.lattice.probe_on(self.probe_edge_tcpdump)
+        self.lattice.probe_on(self.probe_edge_process)
 
 
     def stop_monitoring(self):
         self.lattice.probe_off(self.probe_iot_hostmon)
-        #self.lattice.probe_off(self.probe_iot_tcpdump)
         self.lattice.probe_off(self.probe_edge_hostmon)
         self.lattice.probe_off(self.probe_edge_tcpdump)
+        self.lattice.probe_off(self.probe_edge_process)
+
 
 
     def stop_components(self):
         self.lattice.unload_probe(self.probe_iot_hostmon)
-        #self.lattice.unload_probe(self.probe_iot_tcpdump)
         self.lattice.unload_probe(self.probe_edge_hostmon)
         self.lattice.unload_probe(self.probe_edge_tcpdump)
+        self.lattice.unload_probe(self.probe_edge_process)
 
         self.lattice.stop_ds(self.iot_ds, self.host_iot_session)
         self.lattice.stop_ds(self.edge_ds, self.host_edge_session)
