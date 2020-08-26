@@ -38,13 +38,13 @@ if __name__ == '__main__':
    #expSetName = 'exps_results/exp_2/with_print'
    #isVerbose = True
 
-   #exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_udp_xdr.properties', expSetName, 'xdr_nonames_udp', duration, edge, edge_if, consumer_port, isVerbose)
+   #exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_udp_xdr.properties', expSetName, 'xdr_udp_nonames', duration, edge, edge_if, consumer_port, isVerbose)
    #exp.start()
 
    #exp = UDPXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_udp_xdr_with_names.properties', expSetName, 'xdr_udp', duration, edge, edge_if, consumer_port, isVerbose)
    #exp.start()
 
-   #exp = WSXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr.properties', expSetName, 'xdr_nonames_ws', duration, edge, edge_if, consumer_port, isVerbose)
+   #exp = WSXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr.properties', expSetName, 'xdr_ws_nonames', duration, edge, edge_if, consumer_port, isVerbose)
    #exp.start()
 
    #exp = WSXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr_with_names.properties', expSetName, 'xdr_ws', duration, edge, edge_if, consumer_port, isVerbose)
@@ -61,13 +61,13 @@ if __name__ == '__main__':
    expSetName = 'exps_results/exp_1/no_print'
    isVerbose = False
 
-   exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_xdr.properties', expSetName, 'xdr_nonames_udp', duration, edge, edge_if, consumer_port, isVerbose)
+   exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_xdr.properties', expSetName, 'xdr_udp_nonames', duration, edge, edge_if, consumer_port, isVerbose)
    exp.start()
 
    exp = UDPXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_xdr_with_names.properties', expSetName, 'xdr_udp', duration, edge, edge_if, consumer_port, isVerbose)
    exp.start()
 
-   #exp = WSXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr.properties', expSetName, 'xdr_nonames_ws', duration, edge, edge_if, consumer_port, isVerbose)
+   #exp = WSXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr.properties', expSetName, 'xdr_ws_nonames', duration, edge, edge_if, consumer_port, isVerbose)
    #exp.start()
 
    #exp = WSXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr_with_names.properties', expSetName, 'xdr_ws', duration, edge, edge_if, consumer_port, isVerbose)
