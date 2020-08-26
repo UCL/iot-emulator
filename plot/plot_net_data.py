@@ -1,3 +1,5 @@
+from plot_data import PlotData
+
 import os
 import pandas as pd
 import numpy as np
@@ -7,57 +9,36 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-class PlotNetworkData():
+class PlotNetworkData(PlotData):
 
         def __init__(self, logfile_name, set_dir, dirs):
-            self.set_dir = set_dir
-            self.graphs_dir = set_dir + '/graphs/'
-            self.dirs = dirs
-            self.data_frames = []
-            for exp_dir in self.dirs:
-                print('loading: ' + exp_dir)
-                self.load_data(exp_dir + '/' + logfile_name)
-            self.__create_dir()
+            PlotData.__init__(self, logfile_name, set_dir, dirs)
 
 
+        def load_data(self, exp_info):
+            file_name = exp_info['dir'] + '/' + self.logfile_name
 
-        def __create_dir(self):
-            if not os.path.isdir(self.graphs_dir):
-               try:
-                  os.mkdir(self.graphs_dir)
-               except OSError:
-                  print('Error while creating graphs directory')
-                  exit(1)
-
-
-        def get_title(self, directory):
-            f = open(directory + '/title.txt')
-            title = f.readline()
-            f.close()
-            return title.strip()
-	    
-
-        def load_data(self, file_name):
             data_frame = pd.read_csv(file_name,
                                           sep = ' ',
                                           names=['Timestamp', 'Elapsed', 'Type', 'Name', 'Interface', 'Port', 'inBytes', 'inPackets', 'outBytes', 'outPackets'])
             data_frame['Elapsed'] = pd.to_timedelta(data_frame['Elapsed'])
             #print(data_frame.tail())
-            self.data_frames.append(data_frame)
+            exp_info['data'] = data_frame
 
 
         def plot_bytes(self):
             fig, (ax1, ax2) = plt.subplots(2, 1, sharey=True)
 
-            dir_index = 0
-            for data_frame in self.data_frames:
+            for exp_info in self.set_info:
+                data_frame = exp_info['data']
+
                 x = data_frame.Elapsed.dt.total_seconds()
                 y1 = data_frame.inBytes
                 y2 = data_frame.outBytes
-                label = self.get_title(self.dirs[dir_index])
+
+                label = exp_info['title']
                 ax1.plot(x, y1, label=label)
                 ax2.plot(x, y2, label=label)
-                dir_index+=1
 
             # adjusting the ticks on the xasis to match time base (60)
             stepsize = 600
@@ -87,15 +68,14 @@ class PlotNetworkData():
 
         def plot_packets(self):
             fig, (ax1, ax2) = plt.subplots(2, 1, sharey=True)
-            dir_index = 0
-            for data_frame in self.data_frames:
+            for exp_info in self.set_info:
+                data_frame = exp_info['data']
                 x = data_frame.Elapsed.dt.total_seconds()
                 y1 = data_frame.inPackets
                 y2 = data_frame.outPackets
-                label = self.get_title(self.dirs[dir_index])
+                label = exp_info['title']
                 ax1.plot(x, y1, label=label)
                 ax2.plot(x, y2, label=label)
-                dir_index+=1
 
             # adjusting the ticks on the xasis to match time base (60)
             stepsize = 600
@@ -115,7 +95,7 @@ class PlotNetworkData():
 
             ax1.grid()
             ax1.legend(loc='upper left', fontsize='xx-small')
-            ax1.ticklabel_format(axis='y', scilimits=(9,9), useMathText=True)
+            ax1.ticklabel_format(axis='y', scilimits=(6,6), useMathText=True)
 
             ax2.grid()
             ax2.legend(loc='upper left', fontsize='xx-small')

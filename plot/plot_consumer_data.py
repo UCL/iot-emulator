@@ -1,3 +1,5 @@
+from plot_data import PlotData
+
 import os
 import pandas as pd
 import numpy as np
@@ -7,50 +9,28 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-class PlotConsumerData():
+class PlotConsumerData(PlotData):
 
         def __init__(self, logfile_name, set_dir, dirs):
-            self.set_dir = set_dir
-            self.graphs_dir = set_dir + '/graphs/'
-            self.dirs = dirs
-            self.data_frames = []
-            for exp_dir in self.dirs:
-                print('loading: ' + exp_dir)
-                self.load_data(exp_dir + '/' + logfile_name)
-            self.__create_dir()
+            PlotData.__init__(self, logfile_name, set_dir, dirs)
 
 
+        def load_data(self, exp_info):
+            file_name = exp_info['dir'] + '/' + self.logfile_name
 
-        def __create_dir(self):
-            if not os.path.isdir(self.graphs_dir):
-               try:
-                  os.mkdir(self.graphs_dir)
-               except OSError:
-                  print('Error while creating graphs directory')
-                  exit(1)
-
-
-        def get_title(self, directory):
-            f = open(directory + '/title.txt')
-            title = f.readline()
-            f.close()
-            return title.strip()
-	    
-
-        def load_data(self, file_name):
             data_frame = pd.read_csv(file_name,
                                           sep = ' ',
                                           names=['Timestamp', 'Elapsed', 'Type', 'Name', 'Pid', 'Value'])
             data_frame['Elapsed'] = pd.to_timedelta(data_frame['Elapsed'])
             #print(data_frame.tail())
-            self.data_frames.append(data_frame)
+            exp_info['data'] = data_frame
 
 
         def plot(self):
             fig, (ax1, ax2) = plt.subplots(2, 1)
 
-            dir_index = 0
-            for data_frame in self.data_frames:
+            for exp_info in self.set_info:
+                data_frame = exp_info['data']
                 cpu = data_frame.loc[data_frame['Type'] == 'C', ['Elapsed', 'Value']]
                 mem = data_frame.loc[data_frame['Type'] == 'M', ['Elapsed', 'Value']]
                 
@@ -60,10 +40,9 @@ class PlotConsumerData():
                 x2 = mem['Elapsed'].dt.total_seconds()
                 y2 = mem['Value']
   
-                label = self.get_title(self.dirs[dir_index])
+                label = exp_info['title']
                 ax1.plot(x1, y1, label=label)
                 ax2.plot(x2, y2, label=label)
-                dir_index+=1
 
             # adjusting the ticks on the xasis to match time base (60)
             stepsize = 600
@@ -105,10 +84,9 @@ class PlotConsumerData():
             avgs_mem = []
             stds_mem = []
 
-            dir_index = 0
-            for data_frame in self.data_frames:
-                labels.append(self.get_title(self.dirs[dir_index]))
-                dir_index+=1
+            for exp_info in self.set_info:
+                data_frame = exp_info['data']
+                labels.append(exp_info['title'])
 
                 avgs_cpu.append(data_frame.groupby('Type')['Value'].get_group('C').mean())
                 stds_cpu.append(data_frame.groupby('Type')['Value'].get_group('C').std())
@@ -128,12 +106,12 @@ class PlotConsumerData():
                    title='Average Mem usage (on Edge host)')
 
             ax1.xaxis.set_ticks(ypos)
-            ax1.xaxis.set_ticklabels(labels, fontsize='x-small')
+            ax1.xaxis.set_ticklabels(labels, fontsize='xx-small')
             ax1.grid()
             ax1.set_axisbelow(True)
 
             ax2.xaxis.set_ticks(ypos)
-            ax2.xaxis.set_ticklabels(labels, fontsize='x-small')
+            ax2.xaxis.set_ticklabels(labels, fontsize='xx-small')
             ax2.grid()
             ax2.set_axisbelow(True)
 
