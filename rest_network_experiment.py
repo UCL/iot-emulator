@@ -8,12 +8,12 @@ from monitoring import Monitoring
 
 
 class RestSimpleNetworkExperiment(SimpleNetworkExperiment):
-       def __init__(self, conn, conf_file, setName, duration, consumer_host, tcpdump_if, consumer_port, consumer_url, verbose):
+       def __init__(self, conn, conf_file, setName, title, duration, consumer_host, tcpdump_if, consumer_port, consumer_url, verbose):
            self.consumer_host = consumer_host
            self.consumer_port = consumer_port
            self.consumer_url = consumer_url
            self.verbose = verbose
-           SimpleNetworkExperiment.__init__(self, conn, conf_file, setName, duration, tcpdump_if, consumer_port)
+           SimpleNetworkExperiment.__init__(self, conn, conf_file, setName, title, duration, tcpdump_if, consumer_port)
  
 
        def startConsumer(self):

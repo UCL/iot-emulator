@@ -8,11 +8,11 @@ from monitoring import Monitoring
 
 
 class WSSimpleNetworkExperiment(SimpleNetworkExperiment):
-       def __init__(self, conn, conf_file, setName, duration, consumer_host, tcpdump_if, consumer_port, verbose):
+       def __init__(self, conn, conf_file, setName, title, duration, consumer_host, tcpdump_if, consumer_port, verbose):
            self.consumer_host = consumer_host
            self.consumer_port = consumer_port
            self.verbose = verbose
-           SimpleNetworkExperiment.__init__(self, conn, conf_file, setName, duration, tcpdump_if, consumer_port)
+           SimpleNetworkExperiment.__init__(self, conn, conf_file, setName, title, duration, tcpdump_if, consumer_port)
  
 
        def startConsumer(self):

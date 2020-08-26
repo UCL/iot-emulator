@@ -9,14 +9,15 @@ from monitoring import Monitoring
 
 
 class SimpleNetworkExperiment(Experiment):
-       def __init__(self, conn, conf_file, setName, duration, tcpdump_if, tcpdump_port):
+       def __init__(self, conn, conf_file, setName, title, duration, tcpdump_if, tcpdump_port):
            self.conn = conn
            self.conf_file = conf_file
-           self.duration = duration
            self.setName = setName
+           self.title = title
+           self.duration = duration
            self.tcpdump_if = tcpdump_if
            self.tcpdump_port = tcpdump_port
-           self.exp_name = 'exp_' + str(int(time.time()))
+           self.exp_name = 'exp_' + title + '_' + str(int(time.time()))
            self.mon_controller = self.conn.monHostName
            self.iot = self.conn.monHostName # this is the same host where the Lattice controller id running
            self.edge = self.conn.clusterMgmHostName # the host where the processing functions are (cm in the case of faas / containers)
@@ -35,7 +36,7 @@ class SimpleNetworkExperiment(Experiment):
            # create dir: /home/setName/name/
            self.exp_path = os.getenv("HOME") + '/' + self.setName + '/'
            if not os.path.exists(self.exp_path):
-              os.mkdir(self.exp_path)
+              os.makedirs(self.exp_path)
 
            self.exp_path = self.exp_path + self.exp_name
            os.mkdir(self.exp_path)
@@ -48,6 +49,11 @@ class SimpleNetworkExperiment(Experiment):
            self.stderr = sys.stderr
            sys.stdout = open(self.exp_path + '/output.log', 'w')
            sys.stderr = open(self.exp_path + '/error.log', 'w')
+
+           #setting exp title in file
+           f = open(self.exp_path + '/title.txt', 'w')
+           f.write(self.title)
+           f.close()
 
            print('+++ IoT: ' + self.conn.monHostName)
            print('+++ Edge: ' + self.conn.clusterMgmHostName)
