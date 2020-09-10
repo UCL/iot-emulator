@@ -103,6 +103,27 @@ class SimpleNetworkExperiment(Experiment):
        def stopConsumer():
            raise NotImplementedError('subclasses must override stopConsumer!')
 
+ 
+       def collectLatticeLogs(self):
+           directory = self.exp_path + '/ds/'
+           command = 'mkdir ' + directory
+           result = self.monHost.run(command)
+           if result.ok == True:
+              command = 'cp /tmp/data-source-* ' + directory
+              result = self.monHost.run(command)
+              if result.ok == True:
+                 print('Successfully imported  ds logs')
+           Experiment.collectLatticeLogs(self)
+
+
+       def collectConsumerStats(self):
+           directory = self.exp_path + '/'
+           command = 'mv /tmp/stats_*.log ' + directory
+           result = self.clusterMgmHost.run(command)
+           if result.ok == True:
+              print('Successfully imported IoT emulator timestamp information')    
+
+
 
        def start(self):
            self.startLattice()
@@ -115,5 +136,6 @@ class SimpleNetworkExperiment(Experiment):
            self.collectLatticeLogs()
            self.saveIotConf()
            self.collectTimestamp()
+           self.collectConsumerStats()
            self.cleanup()
 

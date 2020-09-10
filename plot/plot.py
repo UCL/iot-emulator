@@ -54,7 +54,7 @@ class Plot():
 
 
 if __name__ == '__main__':
-   p = Plot('/home/uceeftu/exps_results/exp_1/with_print')
+   p = Plot('/home/uceeftu/exps_results/exp_1/no_print')
    p.plot_network()
    p.plot_consumer()
 

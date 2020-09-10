@@ -8,26 +8,24 @@ from monitoring import Monitoring
 
 
 class UDPXDRSimpleNetworkExperiment(SimpleNetworkExperiment):
-       def __init__(self, conn, conf_file, setName, title, duration, consumer_host, tcpdump_if, consumer_port, verbose):
+       def __init__(self, conn, conf_file, setName, title, duration, consumer_host, tcpdump_if, consumer_port, conf):
            self.consumer_host = consumer_host
            self.consumer_port = consumer_port
-           self.verbose = verbose
+           self.conf = conf
            SimpleNetworkExperiment.__init__(self, conn, conf_file, setName, title, duration, tcpdump_if, consumer_port)
  
 
        def startConsumer(self):
            print('Starting Processing function')
            command = 'screen -dmS udpConsumer java -cp /home/uceeftu/lattice/jars/monitoring-bin-core-2.0.1.jar mon.lattice.appl.dataconsumers.UDPXDRDataConsumer ' + \
-                     self.consumer_port + ' ' + str(self.verbose)
+                     self.consumer_port + ' ' + str(self.conf)
 
            print(command)
            result = self.clusterMgmHost.run(command)
 
            if result.ok == True:
-              #command = 'screen -list | grep wsConsumer'
               command = 'pgrep -fn mon.lattice.appl.dataconsumers.UDPXDRDataConsumer'
               result = self.clusterMgmHost.run(command, hide=True)
-              #self.consumer_PID = result.stdout.strip().split('.')[0].strip()
               self.consumer_PID = result.stdout.strip()
               print('Consumer successfully started => PID: ' + self.consumer_PID)
            
