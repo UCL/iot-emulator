@@ -121,7 +121,7 @@ class SimpleNetworkExperiment(Experiment):
            command = 'mv /tmp/stats_*.log ' + directory
            result = self.clusterMgmHost.run(command)
            if result.ok == True:
-              print('Successfully imported IoT emulator timestamp information')    
+              print('Successfully imported consumer stats')    
 
 
 

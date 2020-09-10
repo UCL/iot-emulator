@@ -32,13 +32,13 @@ if __name__ == '__main__':
    connector = Connector(mon, edge, receiver)
    connector.initConnections()
 
-   duration = 1
+   duration = 60
 
    # will be created under user's home directory
    expSetName = 'exps_results/exp_3/no_print'
    conf = 2
 
-   '''
+   
    exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_3/iot_udp_xdr.properties', expSetName, 'xdr_udp_nonames', duration, edge, edge_if, consumer_port, conf)
    exp.start()
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
    exp = WSXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_3/iot_ws_xdr_with_names.properties', expSetName, 'xdr_ws', duration, edge, edge_if, consumer_port, conf)
    exp.start()
-   '''
+   
 
    n_threads = 1
    isSimpleJSON = False

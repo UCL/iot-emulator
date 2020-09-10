@@ -34,52 +34,31 @@ if __name__ == '__main__':
 
    duration = 60
 
-
    # will be created under user's home directory
-   #expSetName = 'exps_results/exp_1/with_print'
-   #isVerbose = True
+   expSetName = 'exps_results/exp_1_new/no_print'
+   conf = 2
 
-   #exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_udp_xdr.properties', expSetName, 'xdr_udp_nonames', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
+   
+   exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_xdr.properties', expSetName, 'xdr_udp_nonames', duration, edge, edge_if, consumer_port, conf)
+   exp.start()
 
-   #exp = UDPXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_udp_xdr_with_names.properties', expSetName, 'xdr_udp', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
+   exp = UDPXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_xdr_with_names.properties', expSetName, 'xdr_udp', duration, edge, edge_if, consumer_port, conf)
+   exp.start()
 
-   #exp = WSXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr.properties', expSetName, 'xdr_ws_nonames', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
+   exp = UDPJSONSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_json.properties', expSetName, 'json_udp', duration, edge, edge_if, consumer_port, conf)
+   exp.start()
 
-   #exp = WSXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr_with_names.properties', expSetName, 'xdr_ws', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
+   exp = WSXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_ws_xdr.properties', expSetName, 'xdr_ws_nonames', duration, edge, edge_if, consumer_port, conf)
+   exp.start()
 
-   #exp = WSJSONSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws.properties', expSetName, 'json_ws', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
+   exp = WSXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_ws_xdr_with_names.properties', expSetName, 'xdr_ws', duration, edge, edge_if, consumer_port, conf)
+   exp.start()
 
-   #exp = RestSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_rest.properties', expSetName, 'json_rest', duration, edge, edge_if, consumer_port, consumer_url, isVerbose)
-   #exp.start()
-
-
-
-   expSetName = 'exps_results/exp_1/no_print'
-   isVerbose = False
-
-   #exp = UDPXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_xdr.properties', expSetName, 'xdr_udp_nonames', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
-
-   #exp = UDPXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_xdr_with_names.properties', expSetName, 'xdr_udp', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
-
-   exp = UDPJSONSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_udp_json.properties', expSetName, 'json_udp', duration, edge, edge_if, consumer_port, isVerbose)
-   exp.start() 
-
-   #exp = WSXDRSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr.properties', expSetName, 'xdr_ws_nonames', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
-
-   #exp = WSXDRWithNamesSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws_xdr_with_names.properties', expSetName, 'xdr_ws', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
-
-   #exp = WSJSONSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_ws.properties', expSetName, 'json_ws', duration, edge, edge_if, consumer_port, isVerbose)
-   #exp.start()
-
-   #exp = RestSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_2/iot_rest.properties', expSetName, 'json_rest', duration, edge, edge_if, consumer_port, consumer_url, isVerbose)
-   #exp.start()
+   #n_threads = 1
+   isSimpleJSON = False
+   exp = WSJSONSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_ws.properties', expSetName, 'json_ws', duration, edge, edge_if, consumer_port, conf, isSimpleJSON)
+   exp.start()
+   
+   exp = RestSimpleNetworkExperiment(connector, '/home/uceeftu/iot/network/exp_1/iot_rest.properties', expSetName, 'json_rest', duration, edge, edge_if, consumer_port, consumer_url, conf)
+   exp.start()
 
